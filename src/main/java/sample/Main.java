@@ -18,29 +18,44 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.bytebuddy.asm.Advice;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
 
-    CharacterFileManager cfm = new CharacterFileManager();
-    List<String> lista = new ArrayList<>();
+    Kolokvijum kolokvijum = new Kolokvijum();
+    List<RezultatKolokvijuma> rez = new ArrayList<>();
+    RezultatKolokvijuma rk = new RezultatKolokvijuma("David","Janjic","464/16","20",
+            LocalDate.of(2020,03,07),"dodatni poeni na prezentaciju");
+    RezultatKolokvijuma rk1 = new RezultatKolokvijuma("Natalija","Pantelic","251/16","18",
+            LocalDate.of(2020,03,24),"poeni sa vezbi");
+    RezultatKolokvijuma rk2 = new RezultatKolokvijuma("Nikola","Curcic","151/16","16",
+            LocalDate.of(2020,03,24),"Nije radio test");
+    RezultatKolokvijuma rk3 = new RezultatKolokvijuma("Gorcin","Rancic","53/16","19.5",
+            LocalDate.of(2020,03,07),"skoro max bodova");
+    ObjectIO oio = new ObjectIO();
 
-    //    List<RezultatKolokvijuma> rezultati = new ArrayList<>();
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("Rezultati kolokvijuma");
         GridPane masterGrid = new GridPane();
 
-        RezultatKolokvijuma.setSviRezultati(cfm.readFile());
-        for (RezultatKolokvijuma x : RezultatKolokvijuma.getSviRezultati()) {
-            lista.add(x.toString());
-        }
-        ObservableList<String> list = FXCollections.observableArrayList(lista);
+        rez.add(rk);
+        rez.add(rk1);
+        rez.add(rk2);
+        rez.add(rk3);
+
+        oio.writeFile(rez);
+
+        kolokvijum.setSviRezultati(oio.readFile());
+
+        ObservableList<RezultatKolokvijuma> list = FXCollections.observableArrayList(kolokvijum.getSviRezultati());
         ListView lv = new ListView<>();
         lv.getItems().addAll(list);
-        lv.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        lv.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20, 20, 20, 20));
@@ -94,38 +109,35 @@ public class Main extends Application {
 
 
         lv.setOnMouseClicked(event -> {
-            RezultatKolokvijuma rk = new RezultatKolokvijuma();
-            String a = (String) lv.getSelectionModel().getSelectedItems().get(0);
-            for (int i = 0; i < RezultatKolokvijuma.getSviRezultati().size(); i++) {
-                if (a.equals(RezultatKolokvijuma.getSviRezultati().get(i).toString())) {
-                    rk = cfm.readFile().get(i);
+            RezultatKolokvijuma rezK = new RezultatKolokvijuma();
+            RezultatKolokvijuma selectedItem = (RezultatKolokvijuma) lv.getSelectionModel().getSelectedItems().get(0);
+            for (int i = 0; i < kolokvijum.getSviRezultati().size(); i++) {
+                if (selectedItem.equals(kolokvijum.getSviRezultati().get(i))) {
+                    rezK = oio.readFile().get(i);
                 }
             }
-            imeTf.setText(rk.getIme());
+            imeTf.setText(rezK.getIme());
             imeTf.setDisable(true);
-            prezimeTf.setText(rk.getPrezime());
+            prezimeTf.setText(rezK.getPrezime());
             prezimeTf.setDisable(true);
-            brIndexaTf.setText(rk.getBrIndexa());
+            brIndexaTf.setText(rezK.getBrIndexa());
             brIndexaTf.setDisable(true);
-            brojBodovaTf.setText(rk.getBrBodova());
-            datumDp.setValue(rk.getDatum());
-            napomenaTa.setText(rk.getNapomena());
+            brojBodovaTf.setText(rezK.getBrBodova());
+            datumDp.setValue(rezK.getDatum());
+            napomenaTa.setText(rezK.getNapomena());
         });
 
         Text porukaL = new Text();
         grid.add(porukaL, 1, 7);
 
         button.setOnAction(event -> {
-            for (int i = 0; i < RezultatKolokvijuma.getSviRezultati().size(); i++) {
-                if (lv.getSelectionModel().getSelectedItems().get(0).equals(RezultatKolokvijuma.getSviRezultati().get(i).toString())) {
-                    RezultatKolokvijuma.getSviRezultati().get(i).setBrBodova(brojBodovaTf.getText());
-                    RezultatKolokvijuma.getSviRezultati().get(i).setDatum(datumDp.getValue());
-                    RezultatKolokvijuma.getSviRezultati().get(i).setNapomena(napomenaTa.getText());
-                    cfm.writeFile(RezultatKolokvijuma.getSviRezultati());
-                    ObservableList<String> items = list;
-                    list.clear();
-                    list.setAll(items);
-
+            for (int i = 0; i < kolokvijum.getSviRezultati().size(); i++) {
+                if (lv.getSelectionModel().getSelectedItems().get(0).equals(kolokvijum.getSviRezultati().get(i))) {
+                    kolokvijum.getSviRezultati().get(i).setBrBodova(brojBodovaTf.getText());
+                    kolokvijum.getSviRezultati().get(i).setDatum(datumDp.getValue());
+                    kolokvijum.getSviRezultati().get(i).setNapomena(napomenaTa.getText());
+                    oio.writeFile(kolokvijum.getSviRezultati());
+                    lv.refresh();
                     porukaL.setFill(Color.BLUE);
                     porukaL.setText("Sacuvano!");
 
