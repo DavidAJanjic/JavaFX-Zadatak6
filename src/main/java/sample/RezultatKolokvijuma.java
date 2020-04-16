@@ -1,19 +1,31 @@
 package sample;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RezultatKolokvijuma {
+public class RezultatKolokvijuma implements Serializable {
+
+    private static final long serialVersionUID = -7693695196859447629L;
+
     private String ime;
     private String prezime;
     private String brIndexa;
     private String brBodova;
     private LocalDate datum;
     private String napomena;
-    private static List<RezultatKolokvijuma> sviRezultati = new ArrayList<>();
 
     public RezultatKolokvijuma() {
+    }
+
+    public RezultatKolokvijuma(String ime, String prezime, String brIndexa, String brBodova, LocalDate datum, String napomena) {
+        this.ime = ime;
+        this.prezime = prezime;
+        this.brIndexa = brIndexa;
+        this.brBodova = brBodova;
+        this.datum = datum;
+        this.napomena = napomena;
     }
 
     public String getIme() {
@@ -64,13 +76,6 @@ public class RezultatKolokvijuma {
         this.napomena = napomena;
     }
 
-    public static List<RezultatKolokvijuma> getSviRezultati() {
-        return sviRezultati;
-    }
-
-    public static void setSviRezultati(List<RezultatKolokvijuma> sviRezultati) {
-        RezultatKolokvijuma.sviRezultati = sviRezultati;
-    }
 
     @Override
     public String toString() {
