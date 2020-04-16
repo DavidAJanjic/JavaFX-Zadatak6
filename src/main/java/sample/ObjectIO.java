@@ -27,8 +27,7 @@ public class ObjectIO {
 
     public List<TestResults> readFile() {
         List<TestResults> rezultati = new ArrayList<>();
-        FileInputStream fis = null;
-        ObjectInputStream ois = null;
+
         File file = new File(AppConfig.filepath);
         if (!file.exists()) {
             try {
@@ -39,6 +38,8 @@ public class ObjectIO {
             rezultati = firstInit();
         } else {
 //        file.exists();   AKO NE POSTOJI NAPRAVI NOVI FILE I VRATI firstInit()
+            FileInputStream fis = null;
+            ObjectInputStream ois = null;
             try {
                 fis = new FileInputStream(AppConfig.filepath);
                 ois = new ObjectInputStream(fis);
