@@ -2,10 +2,8 @@ package sample;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-public class RezultatKolokvijuma implements Serializable {
+public class TestResults implements Serializable {
 
     private static final long serialVersionUID = -7693695196859447629L;
 
@@ -16,10 +14,10 @@ public class RezultatKolokvijuma implements Serializable {
     private LocalDate datum;
     private String napomena;
 
-    public RezultatKolokvijuma() {
+    public TestResults() {
     }
 
-    public RezultatKolokvijuma(String ime, String prezime, String brIndexa, String brBodova, LocalDate datum, String napomena) {
+    public TestResults(String ime, String prezime, String brIndexa, String brBodova, LocalDate datum, String napomena) {
         this.ime = ime;
         this.prezime = prezime;
         this.brIndexa = brIndexa;
@@ -79,6 +77,6 @@ public class RezultatKolokvijuma implements Serializable {
 
     @Override
     public String toString() {
-        return ime +" " + prezime + ": " + brBodova;
+        return ime + " " + prezime + ": " + brBodova;
     }
 }
