@@ -8,8 +8,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ObjectIO oio = new ObjectIO();
-        Interface.generateGUI(primaryStage, oio.readFile());
+//        ObjectIO oio = new ObjectIO("C:\\Users\\David\\Desktop\\test.txt"); // demonstrates usage with different file
+        ObjectIO oio = new ObjectIO(AppConfig.filepath);
+        Interface.generateGUI(primaryStage, oio.readFile(),oio);
 
     }
 

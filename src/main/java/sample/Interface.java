@@ -17,13 +17,13 @@ import java.util.List;
 
 public class Interface {
 
-    public static void generateGUI(Stage stage, List<TestResults> results) {
+    public static void generateGUI(Stage stage, List<TestResults> results, ObjectIO oio) {
         stage.setTitle("Test results");
         GridPane masterGrid = new GridPane();
-        ObjectIO oio = new ObjectIO();
+//        ObjectIO oio = new ObjectIO(AppConfig.filepath);
 
         if (results == null) {
-            results = oio.firstInit();
+            results = oio.readFile();
         }
 
         ObservableList<TestResults> list = FXCollections.observableArrayList(results);

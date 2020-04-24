@@ -7,6 +7,13 @@ import java.util.List;
 
 public class ObjectIO {
 
+    private String filepath;
+
+    public ObjectIO(String filepath) {
+        this.filepath = filepath;
+    }
+
+
     public List<TestResults> firstInit() {
         List<TestResults> rez = new ArrayList<>();
         TestResults rk = new TestResults("David", "Janjic", "464/16", "20",
@@ -28,7 +35,7 @@ public class ObjectIO {
     public List<TestResults> readFile() {
         List<TestResults> rezultati = new ArrayList<>();
 
-        File file = new File(AppConfig.filepath);
+        File file = new File(filepath);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -41,7 +48,7 @@ public class ObjectIO {
             FileInputStream fis = null;
             ObjectInputStream ois = null;
             try {
-                fis = new FileInputStream(AppConfig.filepath);
+                fis = new FileInputStream(filepath);
                 ois = new ObjectInputStream(fis);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -80,7 +87,7 @@ public class ObjectIO {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {
-            fos = new FileOutputStream(AppConfig.filepath);
+            fos = new FileOutputStream(filepath);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(rezultati);
             System.out.println("Object succesfully written to a file.");
@@ -94,5 +101,13 @@ public class ObjectIO {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 }
